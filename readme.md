@@ -2,11 +2,11 @@
 
 STEP 1:
 
-docker build -t glpi-conteiner .
+    docker build -t glpi-conteiner .
 
 STEP 2:
 
-docker-compose up
+    docker-compose up
 
 STEP 3:
 
@@ -16,7 +16,7 @@ acess:
 
 Setup >
 
-    DB config (you can set user and password in docker-compose file), default is:
+DB config (you can set user and password in docker-compose file), default is:
 
     HOST = mariadb
 
