@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: glpi
+spec:
+  selector:
+    matchLabels:
+      app: glpi
+  template:
+    metadata:
+      labels:
+        app: glpi
+        version: v10.0.3
+    spec:
+      initContainers:
+      - name: init-glpi
+        image: localhost:5000/glpi-conteiner
+        imagePullPolicy: Never
+        command: ["/bin/sh", "-c", "cp -R /var/www/html/* /tmp/"]
+        volumeMounts:
+        - name: glpi-pv-storage
+          mountPath: /tmp
+      containers:
+      - image:  localhost:5000/glpi-conteiner
+        imagePullPolicy: Never
+        name:  glpi
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: glpi-pv-storage
+            mountPath: /var/www/html
+      volumes:
+      - name: glpi-pv-storage
+        persistentVolumeClaim:
+          claimName: glpi-pv-claim
+      
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name:  glpi-service
+spec:
+  selector:
+    app:  glpi
+  type: ClusterIP
+  ports:
+  - name:  http
+    port:  80
+    targetPort:  80

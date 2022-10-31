@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  web:
+    image: glpi-conteiner:latest
+    ports:
+      - '80:80'
+    volumes:
+      - glpi:/var/www/html
+    depends_on:
+      - mariadb
+    extra_hosts:
+      - 'localhost:127.0.0.1'
+    networks:
+      - glpi-network
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+    volumes:
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - glpi-network
+  mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'secret'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'pass'
+      MYSQL_DATABASE: 'glpi'
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - glpi-network
+volumes:
+  glpi: {}
+  mysqldata: {}
+networks:
+  glpi-network: {}
