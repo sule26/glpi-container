@@ -1,4 +1,11 @@
-## DOCKER SETUP
+## GLPI Free Asset and IT Management Software Containerization
+
+GLPI Version: 10.0.3
+PHP: 8.1
+
+Docker: OK
+Kubernetes: in progress
+# DOCKER SETUP
 
 STEP 1:
 
@@ -25,6 +32,6 @@ DB config (you can set user and password in docker-compose file), default is:
     password = pass
 
 
-## Kubernetes SETUP
+# Kubernetes SETUP
 
 Working...
