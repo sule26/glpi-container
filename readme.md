@@ -49,6 +49,7 @@ STEP 2: expose service:
     kubectl port-forward glpi-helm-service 80:80
 
 STEP 3: get db password (in windows use gitbash to decode base64):
+
     kubectl get secret glpi-helm-mariadb-secret -o jsonpath='{.data.password}' | base64 --decode
 
 STEP 4: acess & configure
