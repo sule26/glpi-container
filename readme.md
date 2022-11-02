@@ -41,8 +41,8 @@ DB Select >
 
 STEP 1: install with helm:
 
-    helm install glpi-helm ./glpi
-
+    helm repo add glpi-conteiner https://vdiogov.github.io/glpi-conteiner/
+    helm install glpi-helm glpi-conteiner/glpi
 
 STEP 2: expose service:
 
