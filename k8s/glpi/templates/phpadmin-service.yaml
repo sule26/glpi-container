@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ .Release.Name }}-phpadmin-service
+spec:
+  selector:
+    app:  {{ .Release.Name }}-phpadmin
+  type: ClusterIP
+  ports:
+  - name:  http
+    port:  8080
+    targetPort:  80

@@ -1,10 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: glpi-pv-claim
+  name: {{ .Release.Name }}-mariadb-pv-claim
+  labels:
+    app: {{ .Release.Name }}-mariadb
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 2Gi

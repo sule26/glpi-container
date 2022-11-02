@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        version: v10.0.3
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+      - name: init-glpi
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["/bin/sh", "-c", "cp -R /var/www/html/* /tmp/"]
+        volumeMounts:
+        - name: {{ .Release.Name }}-pv-storage
+          mountPath: /tmp
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name:  {{ .Release.Name }}
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: {{ .Release.Name }}-pv-storage
+            mountPath: /var/www/html
+      volumes:
+      - name: {{ .Release.Name }}-pv-storage
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-pv-claim

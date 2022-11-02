@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mariadb
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mariadb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mariadb
+    spec:
+      containers:
+      - image: mariadb:latest
+        name: {{ .Release.Name }}-mariadb
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-mariadb-secret
+              key: root_password
+              optional: false
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-mariadb-secret
+              key: username
+              optional: false
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-mariadb-secret
+              key: password
+              optional: false
+        - name: MYSQL_DATABASE
+          value: glpi
+        ports:
+        - containerPort: 3306
+          name: {{ .Release.Name }}-db
+        volumeMounts:
+        - name: {{ .Release.Name }}-mariadb-pv-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: {{ .Release.Name }}-mariadb-pv-storage
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-mariadb-pv-claim
