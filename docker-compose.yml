@@ -2,11 +2,13 @@ version: '3'
 
 services:
   web:
-    image: glpi-conteiner:latest
+    image: sule26/glpi-conteiner:latest
+    build:
+      dockerfile: ./Dockerfile
     ports:
       - '80:80'
-    volumes:
-      - glpi:/var/www/html
+    # volumes:
+    #   - glpi:/var/www/html
     depends_on:
       - mariadb
     extra_hosts:
@@ -37,7 +39,7 @@ services:
     volumes:
       - mysqldata:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 3307:3306
     networks:
       - glpi-network
 volumes:

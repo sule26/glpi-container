@@ -1,14 +1,18 @@
 FROM php:8.1-apache
 
+RUN apt-get update && \
+    apt-get install -y \
+    sendmail libpng-dev libldap2-dev zlib1g-dev libicu-dev libzip-dev libbz2-dev vim
+
 COPY ./apache /etc/apache2/sites-enabled
 
 COPY ./glpi /var/www/html
-    
+
 COPY ./php/php.ini /usr/local/etc/php/php.ini
 
-RUN apt-get update && \
-    apt-get install -y \
-        sendmail libpng-dev libldap2-dev zlib1g-dev libicu-dev libzip-dev libbz2-dev
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+RUN sed -i 's\Listen 80\Listen 8080\g' /etc/apache2/ports.conf
 
 RUN docker-php-ext-install mysqli
 
@@ -32,6 +36,6 @@ RUN chown -R admin:admin /var/www/html
 
 USER admin
 
-VOLUME [/var/www/html]
+# VOLUME [/var/www/html]
 
 EXPOSE 80/tcp
