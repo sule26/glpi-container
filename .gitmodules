@@ -1,3 +1,0 @@
-[submodule "glpi-sub"]
-	path = glpi-sub
-	url = https://github.com/glpi-project/glpi
