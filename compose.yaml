@@ -12,8 +12,11 @@ services:
 
 #GLPI Container
   glpi:
-    image: diouxx/glpi
+    image: sule26/glpi-container:development
     container_name : glpi
+    build:
+      dockerfile: ./Dockerfile
     ports:
-      - "8080:80"
+    environment:
+      - TIMEZONE=America/Sao_Paulo
     restart: always
