@@ -3,6 +3,7 @@ services:
   mariadb:
     image: mariadb:10.7
     container_name: mariadb
+    hostname: mariadb
     volumes:
       - /var/lib/mysql:/var/lib/mysql
     env_file:
